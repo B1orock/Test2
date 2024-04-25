@@ -1,25 +1,43 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-
 	"Varian_v2/api"
-	"Varian_v2/busines"
+	"Varian_v2/businnes"
 	"Varian_v2/config"
+	"fmt"
+	"log"
+	"net/http"
 )
 
 func main() {
-	// Загрузить конфигурацию
-	cfg := config.LoadConfig()
+	// Выбор типа конфигурации
+	cfgType := "env"
 
-	// Инициализировать бизнес-логику
-	busines.Init(cfg)
+	// Загрузка конфигурации
+	var cfg config.Config
+	switch cfgType {
+	case "yaml":
+		err := config.GetYAMLConfig(&cfg)
+		if err != nil {
+			panic(err)
+		}
+		log.Println()
+	case "env":
+		err := config.GetENVConfig(&cfg)
+		if err != nil {
+			panic(err)
+		}
+	default:
+		log.Fatal("Неверный тип конфигурации")
+	}
 
-	// Создать API-роутер
-	router := api.CreateRouter(cfg)
+	// Инициализация бизнес-логики
+	business.Init(&cfg)
 
-	// Запустить сервер
-	fmt.Println("Запуск сервера на порту", cfg.Port)
+	// Создание API-роутера
+	router := api.CreateRouter(&cfg)
+
+	// Запуск сервера
+	fmt.Println("Запуск сервера на порту", cfg.Port, "Сообщение", cfg.Message)
 	http.ListenAndServe(":"+cfg.Port, router)
 }
