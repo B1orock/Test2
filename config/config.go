@@ -1,10 +1,5 @@
 package config
 
-import (
-	"github.com/spf13/viper"
-	"os"
-)
-
 const (
 	yaml = "yaml"
 	env  = "env"
@@ -15,7 +10,7 @@ type Config struct {
 	Message string `json:"message"`
 }
 
-func GetYAMLConfig(cfg *Config) error {
+/*func GetYAMLConfig(cfg *Config) error {
 	viper.SetConfigFile("config/cfg1.yaml")
 	err := viper.ReadInConfig()
 	if err != nil {
@@ -30,7 +25,7 @@ func GetYAMLConfig(cfg *Config) error {
 	return nil
 }
 
-func GetENVConfig(cfg *Config) error {
+/*func GetENVConfig(cfg *Config) error {
 	cfg.Port = os.Getenv("PORT")
 	cfg.Message = os.Getenv("MESSAGE")
 
