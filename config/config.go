@@ -6,7 +6,7 @@ import (
 )
 
 type Config struct {
-	Port    int    `envconfig:"PORT"`
+	Port    string `envconfig:"PORT"`
 	Message string `envconfig:"MESSAGE"`
 }
 
