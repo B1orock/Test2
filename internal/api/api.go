@@ -11,8 +11,9 @@ func CreateRouter(cfg *config.Config) http.Handler {
 	router := http.NewServeMux()
 
 	// Определить маршрут для приветствия
-	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/get", func(w http.ResponseWriter, r *http.Request) {
 		message := service.GetGreeting()
+		fmt.Fprintf(w, message)
 		fmt.Fprintf(w, message)
 	})
 
