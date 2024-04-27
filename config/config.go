@@ -5,13 +5,13 @@ import (
 	"github.com/kelseyhightower/envconfig"
 )
 
-type ENVConfig struct {
+type Config struct {
 	Port    int    `envconfig:"PORT"`
 	Message string `envconfig:"MESSAGE"`
 }
 
-func GetENVConfig() (*ENVConfig, error) {
-	var cfg ENVConfig
+func GetENVConfig() (*Config, error) {
+	var cfg Config
 	err := envconfig.Process("", &cfg)
 	if err != nil {
 		return nil, err
