@@ -1,50 +1,22 @@
 package config
 
-const (
-	yaml = "yaml"
-	env  = "env"
+import (
+	"fmt"
+	"github.com/kelseyhightower/envconfig"
 )
 
-type Config struct {
-	Port    string `json:"port"`
-	Message string `json:"message"`
+type ENVConfig struct {
+	Port    int    `envconfig:"PORT"`
+	Message string `envconfig:"MESSAGE"`
 }
 
-/*func GetYAMLConfig(cfg *Config) error {
-	viper.SetConfigFile("config/cfg1.yaml")
-	err := viper.ReadInConfig()
+func GetENVConfig() (*ENVConfig, error) {
+	var cfg ENVConfig
+	err := envconfig.Process("", &cfg)
 	if err != nil {
-		return err
+		return nil, err
 	}
-
-	err = viper.Unmarshal(cfg)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	fmt.Println(cfg.Port)
+	fmt.Printf("Message: %s\n", cfg.Message)
+	return &cfg, nil
 }
-
-/*func GetENVConfig(cfg *Config) error {
-	cfg.Port = os.Getenv("PORT")
-	cfg.Message = os.Getenv("MESSAGE")
-
-	return nil
-}
-
-/*func LoadConfig() *Config {
-// Считать конфигурацию из файла
-data, err := ioutil.ReadFile("config.json")
-if err != nil {
-	panic(err)
-}
-
-// Распарсить JSON
-var cfg Config
-err = json.Unmarshal(data, &cfg)
-if err != nil {
-	panic(err)
-}
-
-return &cfg
-*/
