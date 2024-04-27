@@ -16,7 +16,7 @@ func GetENVConfig() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(cfg.Port)
+	fmt.Println("Port: ", cfg.Port)
 	fmt.Printf("Message: %s\n", cfg.Message)
 	return &cfg, nil
 }
