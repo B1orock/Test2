@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"github.com/kelseyhightower/envconfig"
 )
 
@@ -16,7 +15,7 @@ func GetENVConfig() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("Port: ", cfg.Port)
-	fmt.Printf("Message: %s\n", cfg.Message)
+	//fmt.Println("Port: ", cfg.Port)
+	//fmt.Printf("Message: %s\n", cfg.Message)
 	return &cfg, nil
 }

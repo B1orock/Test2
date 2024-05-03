@@ -2,7 +2,7 @@ package main
 
 import (
 	"Varian_v2/config"
-	"Varian_v2/internal/api"
+	api "Varian_v2/internal/restapi"
 	"fmt"
 	"log"
 	"net/http"
@@ -16,10 +16,10 @@ func main() {
 	}
 	log.Println(cfg)
 
-	// Создание API-роутера
-	router := api.CreateRouter(cfg)
+	// Инициализация API
+	api := api.NewAPI(*cfg)
 
 	// Запуск сервера
 	fmt.Println("Запуск сервера на порту", cfg.Port)
-	http.ListenAndServe(":"+cfg.Port, router)
+	http.ListenAndServe(":"+cfg.Port, api)
 }
