@@ -2,6 +2,7 @@ package routes
 
 import (
 	"fmt"
+	_ "github.com/lib/pq"
 	"net/http"
 )
 

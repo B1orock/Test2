@@ -1,26 +1,49 @@
 package repository
 
 import (
-	"github.com/kelseyhightower/envconfig"
+	"Varian_v2/config"
+	"context"
+	"fmt"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-type Connect struct {
-	Port    string `envconfig:"PORT"`
-	Message string `envconfig:"MESSAGE"`
-	DB      struct {
-		Host     string `envconfig:"DB_HOST" default:"localhost"`
-		Port     int    `envconfig:"DB_PORT" default:"5432"`
-		User     string `envconfig:"DB_USER" default:"Kostua"`
-		Password string `envconfig:"DB_PASSWORD" default:"pgp2fasm3p"`
-		Name     string `envconfig:"DB_NAME" default:"SQL-intro"`
-	}
+type Repository struct {
+	pool *pgxpool.Pool
 }
 
-func GetENVConfig() (*Connect, error) {
-	var cfg Connect
-	err := envconfig.Process("", &cfg)
+func NewRepository(ctx context.Context, cfg config.DBConfig) (*Repository, error) {
+	connStr := fmt.Sprintf(`user=%s password=%s
+   host=%s port=%d dbname=%s`,
+		cfg.User,
+		cfg.Password,
+		cfg.Host,
+		cfg.Port,
+		cfg.Name,
+	)
+	conn, err := pgxpool.New(ctx, connStr)
+	return &Repository{pool: conn}, err
+}
+
+func (r *Repository) GetContact() ([]*Contact, error) {
+	rows, err := r.pool.Query(context.Background(), "SELECT * FROM public.contacts")
 	if err != nil {
 		return nil, err
 	}
-	return &cfg, nil
+	defer rows.Close()
+
+	var contacts []*Contact
+	for rows.Next() {
+		contact := &Contact{}
+		err := rows.Scan(&contact.ID, &contact.FirstName, &contact.LastName,
+			&contact.Email, &contact.Phone)
+		if err != nil {
+			return nil, err
+		}
+		contacts = append(contacts, contact) // Добавить contact в массив
+	}
+	return contacts, nil
+}
+
+func (r *Repository) Ping(ctx context.Context) error {
+	return r.pool.Ping(ctx)
 }
